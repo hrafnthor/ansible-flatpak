@@ -1,0 +1,37 @@
+- name: "HTH | Flatpak | Remotes | Add remote for system"
+  community.general.flatpak_remote:
+    name: "{{ remote.name }}"
+    state: present
+    method: system
+    flatpakrepo_url: "{{ remote.url }}"
+  when:
+    - remote.remove is undefined or not remote.remove
+    - remote.users is undefined
+
+- name: "HTH | Flatpak | Remotes | Add remote for users"
+  ansible.builtin.include_tasks: remote_user.yml
+  loop: "{{ remote.users }}"
+  loop_control:
+    loop_var: user
+  when:
+    - remote.remove is undefined or not package.remove
+    - remote.users is defined
+
+# - name: "HTH | Flatpak | Remotes | Add remote for user"
+#   become_user: "{{ remote.method.user }}"
+#   community.general.flatpak_remote:
+#     name: "{{ remote.name }}"
+#     state: present
+#     method: user
+#     flatpakrepo_url: "{{ remote.url }}"
+#   when:
+#     - remote.remove is undefined or not remote.remove
+#     - remote.method is defined
+
+- name: "HTH | Flatpak | Remotes | Remove remote"
+  community.general.flatpak_remote:
+    name: "{{ remote.name }}"
+    state: absent
+  when:
+    - remote.remove is defined
+    - remote.remove
