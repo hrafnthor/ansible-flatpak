@@ -1,0 +1,26 @@
+- name: "HTH | Flatpak | Packages | Install package for whole system"
+  community.general.flatpak:
+    name: "{{ package.name }}"
+    remote: "{{ package.remote }}"
+    state: "{{ 'present' if (package.update is undefined or not package.update) else 'latest' }}"
+    method: system
+  when:
+    - package.remove is undefined or not package.remove
+    - package.users is undefined
+
+- name: "HTH | Flatpak | Packages | Install package for users"
+  ansible.builtin.include_tasks: package_user.yml
+  loop: "{{ package.users }}"
+  loop_control:
+    loop_var: user
+  when:
+    - package.remove is undefined or not package.remove
+    - package.users is defined
+
+- name: "HTH | Flatpak | Packages | Remove package"
+  community.general.flatpak:
+    name: "{{ package.name }}"
+    state: absent
+  when:
+    - package.remove is defined
+    - package.remove

@@ -1,0 +1,7 @@
+- name: "HTH | Flatpak | Packages | Install package for user"
+  become_user: "{{ user }}"
+  community.general.flatpak:
+    name: "{{ package.name }}"
+    remote: "{{ package.remote }}"
+    state: "{{ 'present' if (package.update is undefined or not package.update) else 'latest' }}"
+    method: "user"

@@ -1,0 +1,121 @@
+{
+    "title": "flatpak",
+    "descriptions": "schema for 'flatpak' definition",
+    "type": "object",
+    "properties":
+    {
+        "remove":
+        {
+            "type": "boolean"
+        },
+        "remotes":
+        {
+            "type": "array",
+            "items":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "name":
+                    {
+                        "$ref": "#/definitions/non-empty-string"
+                    },
+                    "url":
+                    {
+                        "$ref": "#/definitions/non-empty-string"
+                    },
+                    "remove":
+                    {
+                        "type": "boolean"
+                    },
+                    "users":
+                    {
+                        "$ref": "#/definitions/non-empty-string-array"
+                    }
+                },
+                "oneOf":
+                [
+                    {
+                        "required":
+                        [
+                            "name",
+                            "remove"
+                        ]
+                    },
+                    {
+                        "required":
+                        [
+                            "name",
+                            "url"
+                        ]
+                    }
+                ]
+            }
+        },
+        "packages":
+        {
+            "type": "array",
+            "items":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "name":
+                    {
+                        "$ref": "#/definitions/non-empty-string"
+                    },
+                    "remove":
+                    {
+                        "type": "boolean"
+                    },
+                    "remote":
+                    {
+                        "$ref": "#/definitions/non-empty-string"
+                    },
+                    "update":
+                    {
+                        "type": "boolean"
+                    },
+                    "users":
+                    {
+                        "$ref": "#/definitions/non-empty-string-array"
+                    }
+                },
+                "oneOf":
+                [
+                    {
+                        "required":
+                        [
+                            "name",
+                            "remove"
+                        ]
+                    },
+                    {
+                        "required":
+                        [
+                            "name",
+                            "remote"
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "definitions":
+    {
+        "non-empty-string":
+        {
+            "type": "string",
+            "minLength": 1
+        },
+        "non-empty-string-array":
+        {
+            "type": "array",
+            "minItems": 1,
+            "items":
+            {
+                "$ref": "#/definitions/non-empty-string"
+            }
+        }
+    }
+}

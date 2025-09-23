@@ -1,0 +1,7 @@
+- name: "HTH | Flatpak | Remotes | Add remote for user"
+  become_user: "{{ user }}"
+  community.general.flatpak_remote:
+    name: "{{ remote.name }}"
+    flatpakrepo_url: "{{ remote.url }}"
+    state: present
+    method: "user"

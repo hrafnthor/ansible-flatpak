@@ -1,0 +1,32 @@
+- name: "HTH | Flatpak | Assert inputs"
+  ansible.utils.validate:
+    data: "{{ flatpak }}"
+    criteria: "{{ lookup('file', 'criteria/flatpak.json') | from_json }}"
+    engine: ansible.utils.jsonschema
+  run_once: yes
+  delegate_to: localhost
+
+- name: "HTH | Flatpak | Manage 'flatpak'"
+  ansible.builtin.package:
+    name: flatpak
+    state: "{{ 'present' if (flatpak.remove is undefined or not flatpak.remove) else 'absent' }}"
+
+- name : "HTH | Flatpak | Manage remotes"
+  ansible.builtin.include_tasks: remote.yml
+  loop: "{{ flatpak.remotes }}"
+  loop_control:
+    loop_var: remote
+  when:
+    - flatpak is defined
+    - flatpak.remove is not defined or not flatpak.remove
+    - flatpak.remotes is defined
+
+- name : "HTH | Flatpak | Manage packages"
+  ansible.builtin.include_tasks: package.yml
+  loop: "{{ flatpak.packages }}"
+  loop_control:
+    loop_var: package
+  when:
+    - flatpak is defined
+    - flatpak.remove is not defined or not flatpak.remove
+    - flatpak.packages is defined

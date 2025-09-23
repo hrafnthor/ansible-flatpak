@@ -1,0 +1,17 @@
+galaxy_info:
+  author: Hrafn Thorvaldsson
+  description: A Ansible role for managing Flatpak remotes and packages.
+  company: hth
+
+  license: Apache2.0
+
+  min_ansible_version: 2.1
+
+  platforms:
+    - name: Ubuntu
+      versions:
+      - 22.04
+      - 20.04
+
+  galaxy_tags:
+    - flatpak
